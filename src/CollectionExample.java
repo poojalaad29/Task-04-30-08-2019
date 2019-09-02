@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class CollectionExample {
+public class CollectionExample implements Comparable <CollectionExample>{
 	static Scanner sc=new Scanner(System.in);
 	int eno;String ename;int salary;String desig;String dept;
 	static ArrayList<CollectionExample>arr=new ArrayList<>();
@@ -29,7 +31,8 @@ public class CollectionExample {
 		hm.put(5,"Search Employee");
 		hm.put(6, "Change Salary");
 		hm.put(7, "Show Employee dept wise");
-		hm.put(8,"Exit");
+		hm.put(8,"View Employees in sorted form");
+		hm.put(9,"Exit");
 		System.out.println(hm);
 		int Choice=sc.nextInt();
 		switch(Choice)
@@ -48,13 +51,55 @@ public class CollectionExample {
 			        break;
 			case 7: collectionexample.DeptwiseEmp();
 			        break;
-			case 8: collectionexample.Exit();
-			        break;
+			case 8: collectionexample.viewSortedEmployee();
+			         break;
+			case 9: System.exit(1);
 			       
 	    }
 		}
 	}
 	
+	private void viewSortedEmployee() {
+		System.out.println("Enter the criteria on which you to sort  1.Employee number  2. Salary");
+		int sort=sc.nextInt();
+		System.out.println("SORTING NOW : ");
+		if(sort==1)
+		Collections.sort(arr,new Comparator<CollectionExample>() 
+			{@Override
+			public int compare(CollectionExample e1, CollectionExample e2) {
+				if(e1.eno==e2.eno)  
+					return 0;  
+					else if(e1.eno>e2.eno)  
+					return 1;  
+					else  
+					return -1;
+			
+		}
+		 });
+		else if(sort==2)
+			Collections.sort(arr,new Comparator<CollectionExample>() 
+			{@Override
+			public int compare(CollectionExample e1, CollectionExample e2) {
+				if(e1.eno==e2.eno)  
+					return 0;  
+					else if(e1.eno>e2.eno)  
+					return 1;  
+					else  
+					return -1;
+		}
+		    
+		});	
+		for(int i=0;i<arr.size();i++)
+  	  {
+     	System.out.println();
+        System.out.println("Employee no is "+arr.get(i).eno);
+  	    System.out.println("Employee name is "+arr.get(i).ename);
+  	    System.out.println("Employee department is "+arr.get(i).dept);
+  	  System.out.println("Employee salary is "+arr.get(i).salary);
+  	  System.out.println("Employee designation is "+arr.get(i).desig);
+  	  }
+   	  }
+		
 	public void InsertEmp() {
 		System.out.println("Enter Eno.");
 		eno=sc.nextInt();
@@ -74,17 +119,29 @@ public class CollectionExample {
       public void ViewAll() {
          if(arr.isEmpty())
     	  System.out.println("No Employee found");
-    	  for(int i=0;i<arr.size();i++)
-    	  {
-    	System.out.println();
-          System.out.println("Employee no is "+arr.get(i).eno);
-    	  System.out.println("Employee name is "+arr.get(i).ename);
-    	  System.out.println("Employee department is "+arr.get(i).dept);
-    	  System.out.println("Employee salary is "+arr.get(i).salary);
-    	  System.out.println("Employee designation is "+arr.get(i).desig);
-    	  }
-    		  
-    	  }
+         Collections.sort(arr,new Comparator<CollectionExample>() {
+ 			@Override
+ 			public int compare(CollectionExample e1, CollectionExample e2) {
+ 				if(e1.eno==e2.eno)  
+ 					return 0;  
+ 					else if(e1.eno>e2.eno)  
+ 					return 1;  
+ 					else  
+ 					return -1;
+ 		}
+ 		    
+ 		});
+ 		for(int i=0;i<arr.size();i++)
+   	  {
+      	System.out.println();
+         System.out.println("Employee no is "+arr.get(i).eno);
+   	  System.out.println("Employee name is "+arr.get(i).ename);
+   	  System.out.println("Employee department is "+arr.get(i).dept);
+   	  System.out.println("Employee salary is "+arr.get(i).salary);
+   	  System.out.println("Employee designation is "+arr.get(i).desig);
+   	  }
+   }
+ 		
      public void ClearData() {
     	 arr.clear();
   		
@@ -145,10 +202,62 @@ public class CollectionExample {
        	 }
     	 }
  }
-     public void Exit() {
-    	System.exit(1);
- 		
- 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dept == null) ? 0 : dept.hashCode());
+		result = prime * result + ((desig == null) ? 0 : desig.hashCode());
+		result = prime * result + ((ename == null) ? 0 : ename.hashCode());
+		result = prime * result + eno;
+		result = prime * result + salary;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CollectionExample other = (CollectionExample) obj;
+		if (dept == null) {
+			if (other.dept != null)
+				return false;
+		} else if (!dept.equals(other.dept))
+			return false;
+		if (desig == null) {
+			if (other.desig != null)
+				return false;
+		} else if (!desig.equals(other.desig))
+			return false;
+		if (ename == null) {
+			if (other.ename != null)
+				return false;
+		} else if (!ename.equals(other.ename))
+			return false;
+		if (eno != other.eno)
+			return false;
+		if (salary != other.salary)
+			return false;
+		return true;
+	}
 
+	@Override
+	public int compareTo(CollectionExample e1) {
+		if(eno>e1.eno){
+			return 1;
+			}else if(eno<e1.eno){
+			return -1;
+			}else{
+			int n=ename.compareTo(e1.ename);
+			return n;
+			}
+
+	}
+	
+	
 
 }
